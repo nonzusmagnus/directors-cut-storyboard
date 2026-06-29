@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Directors Cut — Storyboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:     #0D0507;
+    --card:      #150A0C;
+    --card-alt:  #1A0D10;
+    --gold:      #A63D52;
+    --gold-dim:  #6B2535;
+    --cream:     #F0DDE2;
+    --muted:     #7A5560;
+    --divider:   #2E1219;
+    --red:       #6B1525;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .filmstrip {
+    width: 100%;
+    background: #110608;
+    border-bottom: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    height: 28px;
+  }
+  .filmstrip-hole {
+    flex-shrink: 0;
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--black);
+    margin: 0 6px;
+    border: 1px solid #2a2a2a;
+  }
+
+  header {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 64px 32px 40px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .eyebrow {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .subtitle {
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 20px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .subtitle span { color: var(--cream); font-weight: 700; }
+
+  main {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  .scene {
+    margin-top: 56px;
+    border-left: 2px solid var(--divider);
+    padding-left: 28px;
+    position: relative;
+  }
+  .scene::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .scene-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .scene-number {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+  .scene-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .scene-duration {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+    border: 1px solid var(--divider);
+    padding: 2px 10px;
+    border-radius: 2px;
+  }
+  .scene-body {
+    color: #AAA09A;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .scene-body p { margin-bottom: 10px; }
+
+  .storyboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 18px 0 20px;
+  }
+  .storyboard-panel {
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .storyboard-panel:hover {
+    border-color: var(--gold-dim);
+    transform: translateY(-2px);
+  }
+  .storyboard-panel img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--divider);
+  }
+  .storyboard-panel .panel-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding: 8px 10px;
+    letter-spacing: 0.05em;
+  }
+  .storyboard-panel .panel-label em {
+    color: var(--gold-dim);
+    font-style: normal;
+  }
+
+  .shot-list {
+    margin-top: 14px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .shot-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: #8A8078;
+  }
+  .shot-list li::before {
+    content: '—';
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .dialogue {
+    margin-top: 18px;
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-left: 3px solid var(--gold);
+    padding: 18px 20px;
+    border-radius: 0 4px 4px 0;
+  }
+  .dialogue-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .dialogue-line {
+    font-family: 'Courier Prime', monospace;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .dialogue-line .character { color: var(--gold); font-weight: 700; }
+  .dialogue-line .action { font-style: italic; color: var(--muted); font-size: 13px; }
+
+  .vfx-tag {
+    display: inline-block;
+    background: var(--red);
+    color: #FFD0D0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  .receipt-wrap {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .receipt {
+    background: #F2E4E7;
+    color: #1a0810;
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    padding: 24px 28px;
+    border-radius: 2px;
+    width: 280px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    position: relative;
+    line-height: 1.6;
+  }
+  .receipt::before, .receipt::after {
+    content: '';
+    display: block;
+    height: 14px;
+    background: repeating-linear-gradient(
+      90deg,
+      #F2E4E7 0px,
+      #F2E4E7 12px,
+      transparent 12px,
+      transparent 18px
+    );
+    position: absolute;
+    left: 0; right: 0;
+  }
+  .receipt::before { top: -10px; }
+  .receipt::after  { bottom: -10px; }
+  .receipt-title {
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .receipt-divider {
+    border: none;
+    border-top: 1px dashed #999;
+    margin: 10px 0;
+  }
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: #333;
+  }
+  .receipt-footer {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+  }
+  .receipt-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .strip-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 56px 0 0;
+    color: var(--divider);
+  }
+  .strip-divider::before, .strip-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--divider);
+  }
+  .strip-divider span {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  }
+  .lightbox .close-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  .empty-scene {
+    background: var(--card);
+    border: 1px dashed var(--divider);
+    border-radius: 4px;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    margin: 18px 0 20px;
+  }
+
+  footer {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 32px;
+    border-top: 1px solid var(--divider);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer .brand em { color: var(--gold); font-style: italic; }
+  footer .meta {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  @media (max-width: 560px) {
+    header, main { padding-left: 20px; padding-right: 20px; }
+    .scene { padding-left: 18px; }
+    .subtitle { gap: 16px; }
+    .storyboard-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="filmstrip">
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+  <div class="filmstrip-hole"></div><div class="filmstrip-hole"></div>
+</div>
+
+<header>
+  <div class="eyebrow">Magnus Forever &nbsp;/&nbsp; Storyboard</div>
+  <h1><em>Pour Yourself In</em></h1>
+  <div class="subtitle">
+    <div>Client <span>Directors Cut</span></div>
+    <div>Duration <span>~30 sec</span></div>
+    <div>Talent <span>Two Females, Two Males</span></div>
+    <div>Shoot Date <span>4 July</span></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- SCENE 1: Establishing / Exterior -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 01</div>
+      <div class="scene-title">Establishing / Exterior</div>
+      <div class="scene-duration">5–6 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 1/1.jpeg" alt="Venue exterior" loading="lazy" />
+        <div class="panel-label">Venue exterior — <em>wideshot</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 1/1.1.gif" alt="Approach shot" loading="lazy" />
+        <div class="panel-label">The four approach — <em>animated ref</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>B-roll of the venue exterior. Signage, architecture, atmosphere. The four approach — dressed up, relaxed. Walking toward the entrance and into the venue. No dialogue yet. Tone setting only.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 2: Interior Entrance -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 02</div>
+      <div class="scene-title">Interior Entrance</div>
+      <div class="scene-duration">4–5 sec</div>
+    </div>
+    <div class="empty-scene">
+      &#9733; Mood &amp; reference images needed for this scene
+    </div>
+    <div class="scene-body">
+      <p>As they step inside, the two girls look at each other. They move further in, smiling.</p>
+    </div>
+    <div class="dialogue">
+      <div class="dialogue-label">Dialogue</div>
+      <div class="dialogue-line"><span class="character">Girl 1 —</span> "So what we watching?"</div>
+      <div class="dialogue-line"><span class="action">Girl 2 nods, looking to the guys.</span></div>
+      <div class="dialogue-line"><span class="character">Guy 1 —</span> "It's a surprise."</div>
+      <div class="dialogue-line"><span class="character">Guy 2 —</span> "Drinks first?"</div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: The Pour -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 03</div>
+      <div class="scene-title">The Pour</div>
+      <div class="scene-duration">8 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 3/1.jpeg" alt="Wine pour wide" loading="lazy" />
+        <div class="panel-label">Table setup — <em>wide shot</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 3/2.jpg" alt="Wine pour close-up" loading="lazy" />
+        <div class="panel-label">Wine glass pour — <em>close-up</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>Cut to a close-up of a wine glass being filled — slow, deliberate, cinematic. Pull back to b-roll of the full table setup. Wine bottles, glasses, the spread. Warm light. Feels indulgent.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 4: The Cheers -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 04</div>
+      <div class="scene-title">The Cheers</div>
+      <div class="scene-duration">7 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 4/1.jpg" alt="Cheers wide" loading="lazy" />
+        <div class="panel-label">Cheers — <em>low angle</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 4/2.png" alt="Cheers portrait" loading="lazy" />
+        <div class="panel-label">Cheers — <em>portrait ref</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>B-roll of all four raising their glasses. Camera angle from below looking up — glasses catching the light overhead. Slow motion. Relaxed, natural energy. Laughter without sound. Cinematic and celebratory.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 5: The Experience -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 05</div>
+      <div class="scene-title">The Experience</div>
+      <div class="scene-duration">10 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 5/1.gif" alt="Experience animated" loading="lazy" />
+        <div class="panel-label">Audience reaction — <em>animated ref</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 5/2.jpg" alt="Reaction shot" loading="lazy" />
+        <div class="panel-label">Reaction shot — <em>close-up</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 5/3.jpeg" alt="Cinematic experience" loading="lazy" />
+        <div class="panel-label">Cinematic frame — <em>wideshot</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 5/4.webp" alt="Screen glow" loading="lazy" />
+        <div class="panel-label">Screen glow — <em>beauty shot</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 5/5.jpg" alt="Immersion" loading="lazy" />
+        <div class="panel-label">Fully immersed — <em>vignette</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>The four settle into their seats as the camera steadily <strong>dollies right</strong>, following them as they get comfortable. The film begins.</p>
+    </div>
+    <ul class="shot-list">
+      <li>B-roll — hands reaching into popcorn</li>
+      <li>Laughing reactions, nudging each other</li>
+      <li>Scared faces, gripping their seats</li>
+      <li>Fully immersed, lost in the screen</li>
+      <li>Close-up beauty shots — faces lit by screen glow, warm and intimate</li>
+      <li>Wider shots — heavily vignetted, circle crop. Nostalgic, keyhole feel</li>
+    </ul>
+  </div>
+
+  <!-- SCENE 6: The Staff Reaction -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 06</div>
+      <div class="scene-title">The Staff Reaction</div>
+      <div class="scene-duration">3 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 6/1.webp" alt="Staff smirk" loading="lazy" />
+        <div class="panel-label">Staff member — <em>the look</em></div>
+      </div>
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 6/2.gif" alt="Staff reaction animated" loading="lazy" />
+        <div class="panel-label">Staff reaction — <em>animated ref</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>Whip pan to a staff member nearby — arms folded, slow head shake, half a smirk. The "darn kids" energy. Doesn't say a word. Doesn't need to.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 7: End Card -->
+  <div class="scene">
+    <div class="scene-header">
+      <div class="scene-number">Scene 07</div>
+      <div class="scene-title">End Card</div>
+      <div class="scene-duration">2 sec</div>
+    </div>
+    <div class="storyboard-grid">
+      <div class="storyboard-panel" onclick="openLightbox(this.querySelector('img').src)">
+        <img src="Scene 7/1.webp" alt="Bokeh background" loading="lazy" />
+        <div class="panel-label">Bokeh background — <em>shallow focus</em></div>
+      </div>
+    </div>
+    <div class="scene-body">
+      <p>Shallow focus close-up of the four in the background — heavily blurred, screen glow washing over them. Warm, atmospheric bokeh.</p>
+    </div>
+    <div class="dialogue" style="border-left-color: var(--red);">
+      <div class="vfx-tag">VFX Overlay</div>
+      <div class="receipt-wrap">
+        <div class="receipt">
+          <div class="receipt-title">Directors Cut</div>
+          <hr class="receipt-divider"/>
+          <div class="receipt-row"><span>Date</span><span>[Event Date]</span></div>
+          <div class="receipt-row"><span>Venue</span><span>[Location]</span></div>
+          <div class="receipt-row"><span>Tickets</span><span>[Booking Info]</span></div>
+          <hr class="receipt-divider"/>
+          <div class="receipt-footer">See you there.</div>
+        </div>
+      </div>
+      <div class="receipt-note">Paper receipt VFX curls in over the bokeh background. Corner pin + paper texture in post.</div>
+    </div>
+  </div>
+
+  <div class="strip-divider"><span>End of Storyboard</span></div>
+
+</main>
+
+<footer>
+  <div class="brand">Magnus <em>Forever</em></div>
+  <div class="meta">Directors Cut &nbsp;·&nbsp; Storyboard &nbsp;·&nbsp; 4 July</div>
+</footer>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Full view" />
+  <div class="close-hint">Click anywhere to close</div>
+</div>
+
+<script>
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLightbox();
+});
+</script>
+
+</body>
+</html>
